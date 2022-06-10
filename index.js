@@ -1,6 +1,7 @@
 const core = require('@actions/core')
 const exec = require('@actions/exec')
 const fs = require('fs')
+const semver = require("semver")
 
 async function execCommand(command, options = {}) {
     const projectPath = core.getInput('project-path')
@@ -13,15 +14,18 @@ async function run() {
     const buildNumber = core.getInput('build-number')
     const versionPath = core.getInput('version-path')
 
+    let parsedVersion = semver.parse(version)
+    let newVersion = `${parsedVersion.major}.${parsedVersion.minor}.${parsedVersion.patch}`
+
     if (versionPath) {
         const content = fs.readFileSync(versionPath, 'utf8')
         version = content.trim()
     }
 
     if (version) {
-        core.setOutput('version', version)
+        core.setOutput('version', newVersion)
 
-        const command = `agvtool new-marketing-version ${version}`
+        const command = `agvtool new-marketing-version ${newVersion}`
         console.log(command)
         await execCommand(command).catch(error => {
             core.setFailed(error.message)
