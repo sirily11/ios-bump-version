@@ -6479,13 +6479,13 @@ async function run() {
     const buildNumber = core.getInput('build-number')
     const versionPath = core.getInput('version-path')
 
-    let parsedVersion = semver.parse(version)
-    let newVersion = `${parsedVersion.major}.${parsedVersion.minor}.${parsedVersion.patch}`
-
     if (versionPath) {
         const content = fs.readFileSync(versionPath, 'utf8')
         version = content.trim()
     }
+
+    let parsedVersion = semver.parse(version)
+    let newVersion = `${parsedVersion.major}.${parsedVersion.minor}.${parsedVersion.patch}`
 
     if (version) {
         core.setOutput('version', newVersion)
