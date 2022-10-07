@@ -12803,7 +12803,7 @@ const { parse, build } = __nccwpck_require__(5110);
 
 function updateVersion(projectFile, nextVersion, nextBuildNumber) {
   // go through each key value pair in the project file
-  let totalUpdated = 0;
+  core.startGroup("Updating Version");
   for (const key in projectFile.objects) {
     const value = projectFile.objects[key];
     const buildSettings = value?.buildSettings;
@@ -12812,22 +12812,22 @@ function updateVersion(projectFile, nextVersion, nextBuildNumber) {
 
     if (marketingVer !== undefined) {
       buildSettings.MARKETING_VERSION = nextVersion;
-      totalUpdated++;
+      core.info(`Updated MARKETING_VERSION to ${nextVersion}`);
     }
 
     if (projectVer !== undefined) {
       buildSettings.CURRENT_PROJECT_VERSION = nextBuildNumber;
-      totalUpdated++;
+      core.info(`Updated CURRENT_PROJECT_VERSION to ${nextBuildNumber}`);
     }
   }
+  core.endGroup();
   return totalUpdated;
 }
 
 async function run() {
   let version = core.getInput("version");
   const buildNumber = core.getInput("build-number");
-  core.group("Setup");
-
+  core.startGroup("Setup");
   core.info(`Setting Version: ${version}, Build Number: ${buildNumber}`);
 
   const projFilePath = glob.sync("**/*.pbxproj")[0];
@@ -12836,8 +12836,8 @@ async function run() {
 
   const projFile = fs.readFileSync(projFilePath, "utf8");
   const proj = parse(projFile);
-  let totalUpdated = updateVersion(proj, version, buildNumber);
-  core.info(`Updated ${totalUpdated} build settings`);
+  updateVersion(proj, version, buildNumber);
+
   const newProjFile = build(proj);
   fs.writeFileSync(projFilePath, newProjFile);
 }
