@@ -12837,9 +12837,7 @@ async function run() {
   const projFile = fs.readFileSync(projFilePath, "utf8");
   const proj = parse(projFile);
   let totalUpdated = updateVersion(proj, version, buildNumber);
-  core.group();
   core.info(`Updated ${totalUpdated} build settings`);
-  core.endGroup();
   const newProjFile = build(proj);
   fs.writeFileSync(projFilePath, newProjFile);
 }
