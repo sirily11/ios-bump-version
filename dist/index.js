@@ -12821,7 +12821,6 @@ function updateVersion(projectFile, nextVersion, nextBuildNumber) {
     }
   }
   core.endGroup();
-  return totalUpdated;
 }
 
 async function run() {
