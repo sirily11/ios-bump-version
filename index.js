@@ -15,12 +15,12 @@ function updateVersion(projectFile, nextVersion, nextBuildNumber) {
     const projectVer = buildSettings?.CURRENT_PROJECT_VERSION;
 
     if (marketingVer !== undefined) {
-      core.info(`Updating MARKETING_VERSION to ${nextVersion}`);
+      core.info(`Updating MARKETING_VERSION`);
       buildSettings.MARKETING_VERSION = nextVersion;
     }
 
     if (projectVer !== undefined) {
-      core.info(`Updating CURRENT_PROJECT_VERSION to ${nextBuildNumber}`);
+      core.info(`Updating CURRENT_PROJECT_VERSION`);
       buildSettings.CURRENT_PROJECT_VERSION = nextBuildNumber;
     }
   }
