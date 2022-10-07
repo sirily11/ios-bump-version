@@ -12803,7 +12803,7 @@ const { parse, build } = __nccwpck_require__(5110);
 
 function updateVersion(projectFile, nextVersion, nextBuildNumber) {
   // go through each key value pair in the project file
-  core.group("Updating Version");
+  let totalUpdated = 0;
   for (const key in projectFile.objects) {
     const value = projectFile.objects[key];
     const buildSettings = value?.buildSettings;
@@ -12811,16 +12811,16 @@ function updateVersion(projectFile, nextVersion, nextBuildNumber) {
     const projectVer = buildSettings?.CURRENT_PROJECT_VERSION;
 
     if (marketingVer !== undefined) {
-      core.info(`Updating MARKETING_VERSION`);
       buildSettings.MARKETING_VERSION = nextVersion;
+      totalUpdated++;
     }
 
     if (projectVer !== undefined) {
-      core.info(`Updating CURRENT_PROJECT_VERSION`);
       buildSettings.CURRENT_PROJECT_VERSION = nextBuildNumber;
+      totalUpdated++;
     }
   }
-  core.endGroup();
+  return totalUpdated;
 }
 
 async function run() {
@@ -12836,7 +12836,10 @@ async function run() {
 
   const projFile = fs.readFileSync(projFilePath, "utf8");
   const proj = parse(projFile);
-  updateVersion(proj, version, buildNumber);
+  let totalUpdated = updateVersion(proj, version, buildNumber);
+  core.group();
+  core.info(`Updated ${totalUpdated} build settings`);
+  core.endGroup();
   const newProjFile = build(proj);
   fs.writeFileSync(projFilePath, newProjFile);
 }
