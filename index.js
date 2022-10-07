@@ -24,6 +24,7 @@ function updateVersion(projectFile, nextVersion, nextBuildNumber) {
       buildSettings.CURRENT_PROJECT_VERSION = nextBuildNumber;
     }
   }
+  core.endGroup();
 }
 
 async function run() {
