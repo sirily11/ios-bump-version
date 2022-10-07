@@ -29,7 +29,7 @@ async function run() {
 
   core.info(`Setting Version: ${version}, Build Number: ${buildNumber}`);
 
-  const projFilePath = glob.sync("*.pbxproj")[0];
+  const projFilePath = glob.sync("**/*.pbxproj")[0];
   core.info(`Found Project File Path: ${projFilePath}`);
 
   const projFile = fs.readFileSync(projFilePath, "utf8");
